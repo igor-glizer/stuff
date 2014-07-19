@@ -11,21 +11,19 @@ trait Iterable[T] {
 
   def contains(value: T): Boolean = {
     val it = iterator
-    var item = it.next
-    while (!item.isEmpty) {
-      if (item.get.equals(value))
-        return true
-      else {
-        item = it.next
-      }
-    }
-    false
+    containsAux(value, it)
+  }
+
+  private def containsAux(value: T, it : Iterator[T]): Boolean = {
+    val item = it.next
+    val isFound = item.exists(v => v.equals(value))
+    isFound || (item.nonEmpty && containsAux(value, it))
   }
 
   def size: Int = {
     val it = iterator
     var c = 0
-    while (!it.next.isEmpty) {
+    while (it.next.nonEmpty) {
       c += 1
     }
     c
@@ -73,9 +71,9 @@ class LinkedList[T] extends Iterable[T] {
 
     def next: Option[T] = {
       curr match {
-        case Link(value, next) => {
+        case Link(value, next) =>
           curr = next; Some(value)
-        }
+
         case Tail => None
       }
     }
@@ -95,3 +93,5 @@ val aa = new ArrayList[Int](a)
 
 println("l = " + l.iterator.next.get)
 println("l = " + aa.iterator.next.get)
+l.contains(1)
+l.contains(4)

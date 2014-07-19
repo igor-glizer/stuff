@@ -1,4 +1,6 @@
-//partitial implementation of a calculator
+//partial implementation of a calculator
+
+import Calculator._
 
 object Calculator
 {
@@ -47,8 +49,8 @@ object Calculator
   }
 }
 
-print(Calculator.add(Calculator.Int32(1), Calculator.Int32(2)).value)
-print(Calculator.add(Calculator.Real32(1), Calculator.Real32(2)).value)
-print(Calculator.add(Calculator.Int64(1), Calculator.Int64(2)).value)
-print(Calculator.add(Calculator.Real64(1), Calculator.Real64(2)).value)
+print(add(Int32(1), Int32(2)).value)
+print(add(Real32(1), Real32(2)).value)
+print(add(Int64(1), Int64(2)).value)
+print(add(Real64(1), Real64(2)).value)
 

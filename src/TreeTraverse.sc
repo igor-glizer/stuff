@@ -1,4 +1,4 @@
-import scala.collection.mutable
+import scala.collection.immutable.Queue
 
 //BFS and DFS
 
@@ -8,39 +8,39 @@ case class Node (
                   right : Option[Node]
                   )
 
-def printDFS(node : Node) : Unit =
+def traverseDFS(node : Node, action : Node => Unit) : Unit =
 {
-  println(node.value)
-  if (!node.left.isEmpty)
-    printDFS(node.left.get)
+  action(node)
 
-  node.left.foreach { l => printDFS(l) }
+  node.left.foreach { l => traverseDFS(l, action) }
 
-  if (!node.right.isEmpty)
-    printDFS(node.right.get)
+  node.right.foreach { l => traverseDFS(l, action) }
 }
 
-def printBFS(root : Node) : Unit =
+def traverseBFS(root : Node, action : Node => Unit) : Unit =
 {
-  val queue : mutable.Queue[Node] = new mutable.Queue[Node]()
+  traverseBFSAux(Seq(root), action)
+}
 
-  queue.enqueue(root)
-
-  while (!queue.isEmpty)
+def traverseBFSAux(nodesToVisit : Seq[Node], action : Node => Unit) : Unit =
+{
+  if (!nodesToVisit.isEmpty)
   {
-    val node = queue.dequeue
-    println(node.value)
-    if (!node.left.isEmpty)
-      queue.enqueue(node.left.get)
-    if (!node.right.isEmpty)
-      queue.enqueue(node.right.get)
+    val node = nodesToVisit.head
+    action(node)
+
+    val nextNodes = nodesToVisit.tail ++
+      node.left.map(n => n).seq ++
+      node.right.map(n => n).seq
+    traverseBFSAux(nextNodes, action)
   }
 }
+
 val ll = Node(3, None, None)
 val lr = Node(4, None, None)
 val l = Node(2, Some(ll), Some(lr))
 val rr = Node(6, None, None)
 val r = Node(5, None, Some(rr))
 val root = Node(1, Some(l), Some(r))
-printDFS(root)
-printBFS(root)
+traverseDFS(root, n => println(n.value))
+traverseBFS(root, n => println(n.value))
